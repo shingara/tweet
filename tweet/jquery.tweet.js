@@ -1,9 +1,9 @@
 (function($) {
- 
+
   $.fn.tweet = function(o){
     var s = {
       username: ["seaofclouds"],              // [string]   required, unless you want to display our tweets. :) it can be an array, just do ["username1","username2","etc"]
-      list: null,                              //[string]   optional name of list belonging to username
+      list: null,                             //[string]   optional name of list belonging to username
       avatar_size: null,                      // [integer]  height and width of avatar if displayed (48px max)
       count: 3,                               // [integer]  how many tweets to display?
       intro_text: null,                       // [string]   do you want text BEFORE your your tweets?
@@ -15,11 +15,12 @@
       auto_join_text_reply: "i replied to",   // [string]   auto tense for replies: "i replied to" @someone "with"
       auto_join_text_url: "i was looking at", // [string]   auto tense for urls: "i was looking at" http:...
       loading_text: null,                     // [string]   optional loading text, displayed while tweets load
+      no_tweet: "no tweet found",             // [string]   optional text to see if no tweet found
       query: null                             // [string]   optional search query
     };
-    
+
     if(o) $.extend(s, o);
-    
+
     $.fn.extend({
       linkUrl: function() {
         var returning = [];
@@ -102,6 +103,7 @@
       var list = $('<ul class="tweet_list">').appendTo(this);
       var intro = '<p class="tweet_intro">'+s.intro_text+'</p>';
       var outro = '<p class="tweet_outro">'+s.outro_text+'</p>';
+      var no_tweet = '<p class="no_tweet">'+ s.no_tweet + '</p>';
       var loading = $('<p class="loading">'+s.loading_text+'</p>');
 
       if(typeof(s.username) == "string"){
@@ -147,6 +149,7 @@
           list.children('li:even').addClass('tweet_odd');
         });
         if (s.outro_text) list.after(outro);
+        if (s.no_tweet && data.length < 1) list.after(no_tweet);
       });
 
     });
